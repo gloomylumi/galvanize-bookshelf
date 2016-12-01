@@ -5,9 +5,8 @@ exports.seed = function( knex, Promise ) {
   return knex( 'books' ).del()
     .then( function() {
       return Promise.all( [
-        // Inserts seed entries
-        knex( 'books' ).insert(
-          [ {
+          // Inserts seed entries
+          knex( 'books' ).insert( {
             id: 1,
             title: 'JavaScript, The Good Parts',
             author: 'Douglas Crockford',
@@ -16,7 +15,8 @@ exports.seed = function( knex, Promise ) {
             cover_url: 'https://students-gschool-production.s3.amazonaws.com/uploads/asset/file/284/javascript_the_good_parts.jpg',
             created_at: new Date( '2016-06-26 14:26:16 UTC' ),
             updated_at: new Date( '2016-06-26 14:26:16 UTC' )
-          }, {
+          } ),
+          knex( 'books' ).insert( {
             id: 2,
             title: 'Learning React Native',
             author: 'Bonnie Eisenman',
@@ -25,7 +25,8 @@ exports.seed = function( knex, Promise ) {
             cover_url: 'https://students-gschool-production.s3.amazonaws.com/uploads/asset/file/287/learning_react_native.jpg',
             created_at: new Date( '2016-06-26 14:26:16 UTC' ),
             updated_at: new Date( '2016-06-26 14:26:16 UTC' )
-          }, {
+          } ),
+          knex( 'books' ).insert( {
             id: 3,
             title: 'Functional JavaScript',
             author: 'Michael Fogus',
@@ -34,7 +35,8 @@ exports.seed = function( knex, Promise ) {
             cover_url: 'https://students-gschool-production.s3.amazonaws.com/uploads/asset/file/297/functional_javascript.jpg',
             created_at: new Date( '2016-06-26 14:26:16 UTC' ),
             updated_at: new Date( '2016-06-26 14:26:16 UTC' )
-          }, {
+          } ),
+          knex( 'books' ).insert( {
             id: 4,
             title: 'React: Up & Running',
             author: 'Stoyan Stefanov',
@@ -43,7 +45,8 @@ exports.seed = function( knex, Promise ) {
             cover_url: 'https://students-gschool-production.s3.amazonaws.com/uploads/asset/file/294/react_up_and_running.jpg',
             created_at: new Date( '2016-06-26 14:26:16 UTC' ),
             updated_at: new Date( '2016-06-26 14:26:16 UTC' )
-          }, {
+          } ),
+          knex( 'books' ).insert( {
             id: 5,
             title: 'Learning JavaScript Design Patterns',
             author: 'Addy Osmani',
@@ -52,7 +55,8 @@ exports.seed = function( knex, Promise ) {
             cover_url: 'https://students-gschool-production.s3.amazonaws.com/uploads/asset/file/295/javascript_design_patterns.jpg',
             created_at: new Date( '2016-06-26 14:26:16 UTC' ),
             updated_at: new Date( '2016-06-26 14:26:16 UTC' )
-          }, {
+          } ),
+          knex( 'books' ).insert( {
             id: 6,
             title: 'JavaScript with Promises',
             author: 'Daniel Parker',
@@ -61,7 +65,8 @@ exports.seed = function( knex, Promise ) {
             cover_url: 'https://students-gschool-production.s3.amazonaws.com/uploads/asset/file/296/javascript_with_promises.jpg',
             created_at: new Date( '2016-06-26 14:26:16 UTC' ),
             updated_at: new Date( '2016-06-26 14:26:16 UTC' )
-          }, {
+          } ),
+          knex( 'books' ).insert( {
             id: 7,
             title: 'AngularJS: Up and Running',
             author: 'Shyam Seshadri',
@@ -70,7 +75,8 @@ exports.seed = function( knex, Promise ) {
             cover_url: 'http://akamaicovers.oreilly.com/images/0636920033486/lrg.jpg',
             created_at: new Date( '2016-06-26 14:26:16 UTC' ),
             updated_at: new Date( '2016-06-26 14:26:16 UTC' )
-          }, {
+          } ),
+          knex( 'books' ).insert( {
             id: 8,
             title: 'Web Development with Node and Express',
             author: 'Ethan Brown',
@@ -79,11 +85,12 @@ exports.seed = function( knex, Promise ) {
             cover_url: 'http://akamaicovers.oreilly.com/images/0636920032977/lrg.jpg',
             created_at: new Date( '2016-06-26 14:26:16 UTC' ),
             updated_at: new Date( '2016-06-26 14:26:16 UTC' )
-          } ] )
+          } )
 
+        ] )
         .then( function() {
-          return knex.raw( 'SELECT setval( "books_id_seq", ( SELECT MAX( id ) FROM books ) ) ' );
-        } )
-      ] );
+          return knex.raw( "SELECT setval( 'books_id_seq', ( SELECT MAX( id ) FROM books ) ) " );
+        } );
+
     } );
 };
