@@ -20,8 +20,6 @@ router.get( '/books', function( req, res, next ) {
     .orderBy( 'title' )
     .then( ( books ) => {
       var booksResponse = camelizeKeys( books );
-      console.log( books );
-      console.log( booksResponse );
       res.type( 'json' );
       res.send( booksResponse );
 
@@ -59,25 +57,65 @@ router.post( '/books', function( req, res, next ) {
   knex( 'books' )
     .insert( decamelizeKeys( req.body ), '*' )
     .then( ( books ) => {
-      var booksResponse = camelizeKeys( books[ 0 ] );
+      var response = camelizeKeys( books[ 0 ] );
       res.type( 'json' );
-      res.send( booksResponse );
+      res.send( response );
     } )
     // select and send new row as response with id
 } );
 
 router.patch( '/books/:id', function( req, res, next ) {
   // update books db at specified id for columns in req.body
-  // send updated db entry as response
-  res.set( 'Content-Type', 'application/json' );
-  res.send();
+  knex( 'books' )
+    .where( 'id', req.params.id )
+    .first()
+    .then( ( books ) => {
+      if ( !books ) {
+        return next();
+      }
+      return knex( 'books' )
+        .update( decamelizeKeys( req.body ), '*' )
+        .where( 'id', req.params.id );
+    } )
+    // send updated db entry as response
+    .then( ( books ) => {
+      var response = camelizeKeys( books[ 0 ] );
+      res.type( 'json' );
+      res.send( response );
+    } )
+    .catch( ( err ) => {
+      next( err );
+    } );
 } );
 
 router.delete( '/books/:id', function( req, res, next ) {
   // delete row at specified id
-  // return deleted item
-  res.set( 'Content-Type', 'application/json' );
-  res.send();
+  let book;
+
+  knex( 'books' )
+    .where( 'id', req.params.id )
+    .first()
+    .then( ( row ) => {
+      if ( !row ) {
+        return next();
+      }
+
+      book = row;
+
+      return knex( 'books' )
+        .del()
+        .where( 'id', req.params.id );
+    } )
+    // return deleted item
+    .then( () => {
+      delete book.id;
+      var response = camelizeKeys( book );
+      res.type( 'json' );
+      res.send( response );
+    } )
+    .catch( ( err ) => {
+      next( err );
+    } );
 } );
 
 
