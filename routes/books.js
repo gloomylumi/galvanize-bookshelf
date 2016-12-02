@@ -50,23 +50,30 @@ router.get( '/books/:id', function( req, res, next ) {
     } );
 } );
 
-router.post( '/books', function() {
+router.post( '/books', function( req, res, next ) {
   // validate request body
-  if ( !name || !name.trim() ) {
+  if ( !req.body.title || !req.body.title.trim() ) {
     next( boom.create( 400, "invalid request body" ) );
   }
   // insert parsed req.body into books db
-  // select and send new row as response with id
+  knex( 'books' )
+    .insert( decamelizeKeys( req.body ), '*' )
+    .then( ( books ) => {
+      var booksResponse = camelizeKeys( books[ 0 ] );
+      res.type( 'json' );
+      res.send( booksResponse );
+    } )
+    // select and send new row as response with id
 } );
 
-router.patch( '/books/:id', function() {
+router.patch( '/books/:id', function( req, res, next ) {
   // update books db at specified id for columns in req.body
   // send updated db entry as response
   res.set( 'Content-Type', 'application/json' );
   res.send();
 } );
 
-router.delete( '/books/:id', function() {
+router.delete( '/books/:id', function( req, res, next ) {
   // delete row at specified id
   // return deleted item
   res.set( 'Content-Type', 'application/json' );
