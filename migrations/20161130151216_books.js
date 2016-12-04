@@ -12,5 +12,5 @@ exports.up = function( knex, Promise ) {
 };
 
 exports.down = function( knex, Promise ) {
-  return knex.schema.dropTable().onDelete( 'cascade' );
+  return knex.schema.dropTable( 'books' ).onDelete( 'cascade' );
 };
